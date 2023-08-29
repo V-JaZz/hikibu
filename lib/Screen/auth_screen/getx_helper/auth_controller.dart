@@ -39,7 +39,7 @@ class AuthController extends GetxController {
     var headers = {
       'Content-Type': 'application/x-www-form-urlencoded'
     };
-    var request = http.Request('POST', Uri.parse('http://13.127.11.171:3000/login'));
+    var request = http.Request('POST', Uri.parse('http://139.59.68.139:3000/login'));
     request.bodyFields = {
       "mobile": phoneNo!.trim()
     };
@@ -72,7 +72,7 @@ class AuthController extends GetxController {
 
   Future<void> signIn() async {
     Response res = await ApiClient.to.postData(
-      'http://13.127.11.171:3000/user/login',
+      'http://139.59.68.139:3000/user/login',
         {
           "username": emailController.text,
           "password": passwordController.text
@@ -102,7 +102,7 @@ class AuthController extends GetxController {
       isLoading.value = true;
 
       Response res = await ApiClient.to.postData(
-          'http://13.127.11.171:3000/verifyPhoneOtp',
+          'http://139.59.68.139:3000/verifyPhoneOtp',
           {
             "mobile": phoneNo!.trim(),
             "otp": otpController.value
@@ -219,7 +219,7 @@ class AuthController extends GetxController {
   Future<void> signUp() async {
       try {
         Response res = await ApiClient.to.postData(
-            'http://13.127.11.171:3000/signUp',
+            'http://139.59.68.139:3000/signUp',
             {
               "username":usernameController.text,
               "mobile":phoneNo!.trim(),

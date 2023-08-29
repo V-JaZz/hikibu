@@ -4,14 +4,17 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:get/route_manager.dart';
 import 'package:hukibu/Screen/add_new_child.dart';
 import 'package:hukibu/Screen/Cuddle_Screen/cuddle.dart';
 import 'package:hukibu/Screen/setting_screen.dart';
 import 'package:hukibu/model/get_courses.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:velocity_x/velocity_x.dart';
-
+import 'package:share/share.dart';
+import '../../main.dart';
 import 'getx_helper/home_controller.dart';
 
 class HomeScreen extends GetView<HomeController> {
@@ -19,16 +22,7 @@ class HomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    ScrollController _controller = new ScrollController();
-    List<String> imageUrls = [
-      'https://i.postimg.cc/J08fT6L1/IMG-2743.jpg',
-      'https://i.postimg.cc/Pf8bKX3r/IMG-2744.jpg',
-      'https://i.postimg.cc/fbLmdDSs/IMG-2745.jpg',
-      'https://i.postimg.cc/L6m0YgDZ/kid3.jpg',
-      'https://i.postimg.cc/nrBTjpj2/kelli-mcclintock-w-Bg-AVAGjz-Fg-unsplash.jpg',
-      'https://i.postimg.cc/J4wM9x1C/kid1.jpg',
-      'https://i.postimg.cc/QMzRcNCZ/kid2.jpg',
-    ];
+    ScrollController _controller = ScrollController();
 
     List<Course> courseList = [];
 
@@ -37,9 +31,28 @@ class HomeScreen extends GetView<HomeController> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 36,right: 24),
+                child: IconButton(onPressed: (){
+                  Get.defaultDialog(
+                    title: 'Confirm Exit App?',
+                    content: const SizedBox.shrink(),
+                    titlePadding: const EdgeInsets.only(top: 8),
+                    onCancel: () => Get.back(),
+                    buttonColor: Colors.indigo,
+                    confirmTextColor: Colors.white,
+                    onConfirm: () {
+                      exit(0);
+                    },
+                  );
+                },
+                    icon: const Icon(Icons.exit_to_app_rounded,color: Colors.black)),
+              ),
+            ),
             Padding(
-              padding: const EdgeInsets.only(left: 20, top: 80),
+              padding: const EdgeInsets.only(left: 20, top: 20),
               child: Row(
                 children: [
                   InkWell(
@@ -115,7 +128,8 @@ class HomeScreen extends GetView<HomeController> {
                 color: Colors.black,
               ),
               onTap: () {
-                Navigator.of(context).pop();
+                String linkToShare = 'Try this amazing app https://www.example.com - use my referral 1123456';
+                Share.share(linkToShare);
               },
             ),
             20.heightBox,
@@ -147,24 +161,24 @@ class HomeScreen extends GetView<HomeController> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        // actions: [
-        //   const Center(
-        //     child: Text('English'),
-        //   ),
-        //   Switch(
-        //     onChanged: (val) async {
-        //       controller.toggleSwitch(val);
-        //     },
-        //     value: context.locale.toString() == 'en_US' ? false : true,
-        //     activeColor: Colors.purpleAccent,
-        //     activeTrackColor: Colors.purple,
-        //     inactiveThumbColor: Colors.deepPurple,
-        //     inactiveTrackColor: Colors.deepPurpleAccent,
-        //   ),
-        //   const Center(
-        //     child: Text('Turkish'),
-        //   ),
-        // ],
+        actions: [
+          const Center(
+            child: Text('English'),
+          ),
+          Switch(
+            onChanged: (val) {
+              controller.toggleSwitch(val);
+            },
+            value: context.locale.toString() == 'en_US' ? false : true,
+            activeColor: Colors.purpleAccent,
+            activeTrackColor: Colors.purple,
+            inactiveThumbColor: Colors.deepPurple,
+            inactiveTrackColor: Colors.deepPurpleAccent,
+          ),
+          const Center(
+            child: Text('Turkish'),
+          ),
+        ],
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -178,21 +192,11 @@ class HomeScreen extends GetView<HomeController> {
             const SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: const Text(
-                "Recommended Courses",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ).tr(),
-            ),
             const SizedBox(
               height: 10,
             ),
             FutureBuilder<List<Course>>(
-              future: fetchCourses(),
+              future: controller.getCourses(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return SizedBox(
@@ -228,52 +232,86 @@ class HomeScreen extends GetView<HomeController> {
                     child: Text('Failed to fetch courses'),
                   );
                 } else if (snapshot.hasData) {
-                  final courses = snapshot.data!;
-                  return ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    controller: _controller,
-                    itemCount: courses.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      final course = courses[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Get.to(()=>CuddleScreen(
-                            id: course.id,
-                          ));
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Stack(
-                              children: [
-                                Image.network(
-                                  'http://13.127.11.171:3000/uploads/${course.images}',
-                                  height:
-                                      MediaQuery.of(context).size.height /
-                                          3.8,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
-                                Positioned(
-                                  bottom: 0,
-                                    left: 0,
-                                    right: 0,
-                                    child: Container(
-                                      padding: const EdgeInsets.all(8),
-                                      color: Colors.indigo,
-                                      child: Text(
-                                        course.courseName,
-                                        style: const TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: Colors.white),
-                                      ),
-                                ))
-                              ],
-                            ),
+                  final courses = controller.filteredCourseList;
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          onChanged: (value) => controller.filterCourses(value),
+                          decoration: InputDecoration(
+                              labelText: "search".tr(),
+                              prefixIcon: const Icon(Icons.search),
+                              border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+                              filled: true,
+                              fillColor: Colors.white
                           ),
                         ),
-                      );
-                    },
+                      ),
+                      Obx(
+                        () => ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          controller: _controller,
+                          itemCount: courses.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            final course = courses[index];
+                            return GestureDetector(
+                              onTap: () {
+                                Get.to(()=>CuddleScreen(
+                                  id: course.id!,
+                                  youtubeUrl: course.youtubelink,
+                                ));
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Stack(
+                                    children: [
+                                      Image.network(
+                                        'http://139.59.68.139:3000/uploads/${course.images}',
+                                        errorBuilder: (context, error, stackTrace) => Container(
+                                          color: Colors.grey,
+                                          height:
+                                          MediaQuery.of(context).size.height /
+                                              3.8,
+                                          width: double.infinity,
+                                          child: Center(
+                                            child: Text(
+                                              'NULL IMAGE \n($error)',
+                                              style: const TextStyle(color: Colors.white),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                3.8,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      Positioned(
+                                        bottom: 0,
+                                          left: 0,
+                                          right: 0,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(8),
+                                            color: Colors.indigo,
+                                            child: Text(
+                                              course.courseName.toString(),
+                                              style: const TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: Colors.white),
+                                            ),
+                                      ))
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   );
                 } else {
                   return Container(); // Empty state

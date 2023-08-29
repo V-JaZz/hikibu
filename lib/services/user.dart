@@ -48,7 +48,7 @@ class UserStore extends GetxController {
     if (uid.isNotEmpty) {
       print("uid $uid");
       Response res = await ApiClient.to.getData(
-        'http://13.127.11.171:3000/getUserById/$uid'
+        'http://139.59.68.139:3000/getUserById/$uid'
       );
       print(res.statusCode);
       print(res.body);

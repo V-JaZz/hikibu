@@ -22,7 +22,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     HomeScreen(),
     MyChild(),
     ChatListScreen(),
-   // NotesScreen()
+   NotesScreen(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -75,13 +75,13 @@ class _BottomNavigatorState extends State<BottomNavigator> {
                 iconColor: const Color.fromARGB(255, 128, 126, 126),
                 iconActiveColor: Colors.black,
               ),
-              // GButton(
-              //   icon: Icons.note_sharp,
-              //   text: "Notes".tr(),
-              //   textColor: Colors.black,
-              //   iconColor: const Color.fromARGB(255, 128, 126, 126),
-              //   iconActiveColor: Colors.black,
-              // ),
+              GButton(
+                icon: Icons.note_sharp,
+                text: "notes".tr(),
+                textColor: Colors.black,
+                iconColor: const Color.fromARGB(255, 128, 126, 126),
+                iconActiveColor: Colors.black,
+              ),
             ],
             selectedIndex: _selectedIndex,
             onTabChange: (index) {

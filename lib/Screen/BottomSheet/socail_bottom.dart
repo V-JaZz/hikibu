@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hukibu/Screen/home_screen/bottomnavigate.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -26,14 +27,14 @@ Widget SocialBottom() {
                     shape: BoxShape.circle),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: const [
-                    Icon(Icons.face_retouching_natural),
+                  children: [
+                    const Icon(Icons.face_retouching_natural),
                     Text(
-                      'Social and\nEmotional',
+                      'Social and Emotional'.tr(),
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
                     ),
-                    Divider(
+                    const Divider(
                       endIndent: 20,
                       indent: 20,
                       thickness: 8,
@@ -42,9 +43,14 @@ Widget SocialBottom() {
                   ],
                 ),
               ),
-              const Text(
-                'Wonder! Akber has met his social\nand emotional developmental\nmilestones for the age.Help him\ncontinue the great journey with alot of \nsocail playtime and fun',
-                style: TextStyle(fontSize: 15),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Text(
+                    'Wonder! Child has met his social and emotional developmental milestones for the age. Help him continue the great journey with a lot of social playtime and fun'.tr(),
+                    style: const TextStyle(fontSize: 15),
+                  ),
+                ),
               ),
             ],
           ),
@@ -60,9 +66,9 @@ Widget SocialBottom() {
             color: Color.fromARGB(255, 145, 150, 147),
             padding: EdgeInsets.all(8),
           ),
-          endChild: const Text(
-              'Socail Ans Internatinal Skills- include all the skills that enable the child to intrecet with his/her surrounding and fellows humans',
-              style: TextStyle(fontSize: 16)),
+          endChild: Text(
+              'Social Ans International Skills- include all the skills that enable the child to interact with his/her surrounding and fellows humans'.tr(),
+              style: const TextStyle(fontSize: 16)),
           beforeLineStyle: const LineStyle(
             color: Color.fromARGB(255, 145, 150, 147),
           ),

@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/route_manager.dart';
 import 'package:hukibu/model/course_data.dart';
 import 'package:hukibu/model/get_courses.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -37,6 +37,7 @@ class _CuddleDetailsState extends State<CuddleDetails> {
     },
     // Add more items as needed
   ];
+  bool loading = false;
   // late Future<Course> courseFuture;
   // late Course course;
   // @override
@@ -68,7 +69,7 @@ class _CuddleDetailsState extends State<CuddleDetails> {
   }
 
   void fetchData() async {
-    var url = Uri.parse('http://13.127.11.171:3000/courses/get/${widget.id}');
+    var url = Uri.parse('http://139.59.68.139:3000/courses/get/${widget.id}');
 
     var response = await http.get(url);
 
@@ -102,7 +103,9 @@ class _CuddleDetailsState extends State<CuddleDetails> {
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
                   onTap: () async {
-
+                    setState(() {
+                      loading = true;
+                    });
                     final double price = 1;
                     final double paidPrice = 1.1;
 
@@ -170,6 +173,9 @@ class _CuddleDetailsState extends State<CuddleDetails> {
                       basketItems: basketItems,
                     );
                     log('$paymentResult');
+                    setState(() {
+                      loading = false;
+                    });
                     Get.snackbar(
                       'Payment gateway',
                       '$paymentResult',
@@ -196,14 +202,23 @@ class _CuddleDetailsState extends State<CuddleDetails> {
                     color: const Color.fromARGB(255, 2, 215, 112),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Row(
+                  child: loading
+                      ? Container(
+                    alignment: Alignment.center,
+                      padding: const EdgeInsets.all(6),
+                      child: const AspectRatio(
+                        aspectRatio: 1/1,
+                          child: CircularProgressIndicator(color: Colors.black)
+                      ),
+                  )
+                      :Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Text(
-                        "Join Now",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        "Join Now".tr(),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Icon(Icons.arrow_forward),
+                      const Icon(Icons.arrow_forward),
                     ],
                   ),
                 ),
@@ -220,9 +235,9 @@ class _CuddleDetailsState extends State<CuddleDetails> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'ABOUT THE PROGRAM',
-                  style: TextStyle(color: Colors.grey),
+                Text(
+                  'ABOUT THE PROGRAM'.tr(),
+                  style: const TextStyle(color: Colors.grey),
                 ),
                 10.heightBox,
                 // ),
@@ -263,13 +278,13 @@ class _CuddleDetailsState extends State<CuddleDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      courseModel!.course.courseName,
+                      courseModel!.course.courseName.toString(),
                       style:
                           const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 30),
                     Text(
-                      courseModel!.course.courseDesc,
+                      courseModel!.course.courseDesc.toString(),
                     ),
                   ],
                 ),
@@ -380,7 +395,7 @@ class _CuddleDetailsState extends State<CuddleDetails> {
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: courseModel!.course.whatYouGet
-                              .asMap()
+                              !.asMap()
                               .entries
                               .map((entry) {
                             final index = entry.key;
@@ -404,7 +419,6 @@ class _CuddleDetailsState extends State<CuddleDetails> {
                               padding: const EdgeInsets.all(3.0),
                               child: Container(
                                 height: MediaQuery.of(context).size.height / 18,
-                                width: MediaQuery.of(context).size.width / 4.5,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color:
@@ -414,14 +428,17 @@ class _CuddleDetailsState extends State<CuddleDetails> {
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                  MainAxisAlignment.spaceAround,
                                   children: [
+                                    const SizedBox(width: 3),
                                     Icon(
-                                        iconData), // Use the dynamically assigned icon
+                                        iconData),
+                                    const SizedBox(width: 2),
                                     Text(
                                       item,
                                       style: const TextStyle(fontSize: 12),
                                     ).tr(),
+                                    const SizedBox(width: 4),
                                   ],
                                 ),
                               ),
@@ -433,15 +450,15 @@ class _CuddleDetailsState extends State<CuddleDetails> {
                 // const Text(
                 //     'Make your first days of parenting awesome!\nAs a parent,you are taking up a responsibility inlike anythings else,\n\nYour are the biggest impact on your Child life!\n\nYour Happenies will be their happines.Your knoeledge Will be their.Your peace of mind will be theirs.\n\nYou need support.You need care.You need Cuddle.'),
                 20.heightBox,
-                const Row(children: <Widget>[
-                  Expanded(
+                Row(children: <Widget>[
+                  const Expanded(
                       child: Divider(
                     color: Colors.black,
                     height: 30,
                     endIndent: 15,
                   )),
-                  Text("Meet Your Instruction"),
-                  Expanded(
+                  Text("Meet Your Instruction".tr()),
+                  const Expanded(
                       child: Divider(
                     color: Colors.black,
                     height: 30,
@@ -484,7 +501,7 @@ class _CuddleDetailsState extends State<CuddleDetails> {
                                 //   width: double.infinity,
                                 // ),
                                 child: Image.network(
-                                  'http://13.127.11.171:3000/uploads/${instructorData.image}',
+                                  'http://139.59.68.139:3000/uploads/${instructorData.image}',
                                   fit: BoxFit.cover,
                                   height: double.infinity,
                                   width: double.infinity,

@@ -1,5 +1,5 @@
 class ChildModel {
-  String? uid;
+  dynamic uid;
   String? email;
   String? username;
 

@@ -36,7 +36,7 @@ class RecentChatController extends GetxController {
     try{
       isLoading.value = true;
       final response = await http.get(
-          Uri.parse('http://13.127.11.171:3000/getChildById/${StorageService.to.getString('userIdKey')}')); // Replace with your API endpoint
+          Uri.parse('http://139.59.68.139:3000/getChildById/${StorageService.to.getString('userIdKey')}')); // Replace with your API endpoint
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body) as List<dynamic>;
         final dataList = jsonData.map((item) => Children.fromJson(item)).toList();

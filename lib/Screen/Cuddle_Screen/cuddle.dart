@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/route_manager.dart';
 import 'package:hukibu/Screen/Cuddle_Screen/course_video.dart';
 import 'package:hukibu/model/course_data.dart';
 import 'package:hukibu/model/get_courses.dart';
@@ -10,10 +10,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
 class CuddleScreen extends StatefulWidget {
   final int id;
+  final dynamic youtubeUrl;
 
-  const CuddleScreen({required this.id, super.key});
+  const CuddleScreen({required this.id, super.key, required this.youtubeUrl});
 
   @override
   State<CuddleScreen> createState() => _CuddleScreenState();
@@ -21,6 +24,7 @@ class CuddleScreen extends StatefulWidget {
 
 class _CuddleScreenState extends State<CuddleScreen>
     with TickerProviderStateMixin {
+  YoutubePlayerController? _controller;
   List<Map<String, String>> dataList = [
     {
       'imageUrl': 'https://i.postimg.cc/KcP19fg8/avatar.png',
@@ -63,10 +67,20 @@ class _CuddleScreenState extends State<CuddleScreen>
   void initState() {
     super.initState();
     fetchData();
+
+       if(widget.youtubeUrl != null && widget.youtubeUrl != ''){
+      _controller = YoutubePlayerController(
+        initialVideoId: YoutubePlayer.convertUrlToId(widget.youtubeUrl!)!,
+        flags: const YoutubePlayerFlags(
+          autoPlay: false,
+          mute: false,
+        ),
+      );
+    }
   }
 
   void fetchData() async {
-    var url = Uri.parse('http://13.127.11.171:3000/courses/get/${widget.id}');
+    var url = Uri.parse('http://139.59.68.139:3000/courses/get/${widget.id}');
 
     var response = await http.get(url);
 
@@ -90,24 +104,30 @@ class _CuddleScreenState extends State<CuddleScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-              Image.network(
-                'http://13.127.11.171:3000/uploads/${courseModel!.course.images}',
+              widget.youtubeUrl == null || widget.youtubeUrl == '' || _controller == null
+                  ?Image.network(
+                'http://139.59.68.139:3000/uploads/${courseModel!.course.images}',
                 // 'https://i.postimg.cc/J08fT6L1/IMG-2743.jpg',
+                errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
                 fit: BoxFit.cover,
                 width: double.infinity,
-              ),
+              )
+                  :YoutubePlayer(
+              controller: _controller!,
+              showVideoProgressIndicator: true,
+            ),
               10.heightBox,
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  courseModel!.course.courseName,
+                  courseModel!.course.courseName.toString(),
                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  courseModel!.course.courseDesc,
+                  addNewlineBeforePoints(courseModel!.course.courseDesc.toString()),
                 ),
               ),
               const SizedBox(height: 10),
@@ -430,7 +450,7 @@ class _CuddleScreenState extends State<CuddleScreen>
                             : Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: courseModel!.course.whatYouGet
-                                    .asMap()
+                                    !.asMap()
                                     .entries
                                     .map((entry) {
                                   final index = entry.key;
@@ -455,8 +475,6 @@ class _CuddleScreenState extends State<CuddleScreen>
                                     child: Container(
                                       height:
                                           MediaQuery.of(context).size.height / 18,
-                                      width:
-                                          MediaQuery.of(context).size.width / 4.5,
                                       decoration: BoxDecoration(
                                         border: Border.all(
                                           color: const Color.fromARGB(
@@ -468,12 +486,15 @@ class _CuddleScreenState extends State<CuddleScreen>
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
                                         children: [
+                                          const SizedBox(width: 3),
                                           Icon(
-                                              iconData), // Use the dynamically assigned icon
+                                              iconData),
+                                          const SizedBox(width: 2),
                                           Text(
                                             item,
                                             style: const TextStyle(fontSize: 12),
                                           ).tr(),
+                                          const SizedBox(width: 4),
                                         ],
                                       ),
                                     ),
@@ -602,9 +623,9 @@ class _CuddleScreenState extends State<CuddleScreen>
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(color: Colors.black)),
-                          child: const Center(
+                          child: Center(
                             child: Text(
-                              'LERAN MORE',
+                              'EXPERT SUPPLY'.tr(),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue),
@@ -1064,4 +1085,9 @@ Future<CuddleHeaderData> fetchCuddleHeaderData() async {
   } else {
     throw Exception('Failed to fetch user data');
   }
+}
+
+String addNewlineBeforePoints(String input) {
+  final regex = RegExp(r'(\d+\.)');
+  return input.replaceAllMapped(regex, (match) => '\n${match.group(1)}');
 }

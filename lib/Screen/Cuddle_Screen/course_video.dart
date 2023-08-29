@@ -82,10 +82,11 @@ class _BumbleBeeRemoteVideoState extends State<_BumbleBeeRemoteVideo> {
   @override
   void initState() {
     super.initState();
+    print('http://139.59.68.139:3000/uploads/${widget.videoData.videoUrl}');
     // fetchData();
     _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
         // 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
-        'http://13.126.205.178:3000/uploads/${widget.videoData.videoUrl}'));
+        'http://139.59.68.139:3000/uploads/${widget.videoData.videoUrl}'));
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
       autoInitialize: true,
@@ -203,8 +204,8 @@ class _BumbleBeeRemoteVideoState extends State<_BumbleBeeRemoteVideo> {
                           // );
                           Get.to(() => SensorryBottle(
                               id: activity.id!,
-                              favorite: activity.favorite,
-                              completed: activity.isCompleted
+                              favorite: null,
+                              completed: null
                           ));
                         },
                         child: Padding(
@@ -214,7 +215,7 @@ class _BumbleBeeRemoteVideoState extends State<_BumbleBeeRemoteVideo> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: Image.network(
-                                  'http://13.127.11.171:3000/uploads/${activity.image}',
+                                  'http://139.59.68.139:3000/uploads/${activity.image}',
                                   fit: BoxFit.cover,
                                   width: double.infinity,
                                   color: const Color.fromARGB(85, 0, 0, 0),

@@ -43,6 +43,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final agecontroller = TextEditingController();
   final gendercontroller = TextEditingController();
   final areacontroller = TextEditingController();
+  final mobilecontroller = TextEditingController();
+  final emailcontroller = TextEditingController();
   final educationcontroller = TextEditingController();
   final jobcontroller = TextEditingController();
   final vocationcontroller = TextEditingController();
@@ -60,6 +62,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     educationcontroller.text = widget.user.data?.education??'';
     jobcontroller.text = widget.user.data?.job??'';
     vocationcontroller.text = widget.user.data?.vocation??'';
+    emailcontroller.text = widget.user.data?.email??'';
+    mobilecontroller.text = widget.user.data?.mobile??'';
 
     super.initState();
   }
@@ -98,7 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (pickedImage == null) return null;
       setState(() {});
     } on Exception catch (e) {
-      return const Text('Uploding Faild');
+      return const Text('Uploading Failed');
     }
   }
 
@@ -140,7 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     };
     var request = http.MultipartRequest(
         'PATCH',
-        Uri.parse('http://13.127.11.171:3000/update/${StorageService.to.getString('userIdKey')}')
+        Uri.parse('http://139.59.68.139:3000/update/${StorageService.to.getString('userIdKey')}')
     );
     request.fields.addAll({
       if(namecontroller.text != '')'name': namecontroller.text,
@@ -149,7 +153,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if(areacontroller.text != '')'area': areacontroller.text,
       if(educationcontroller.text != '')'education': educationcontroller.text,
       if(jobcontroller.text != '')'job': jobcontroller.text,
-      if(vocationcontroller.text != '')'vocation': vocationcontroller.text
+      if(vocationcontroller.text != '')'vocation': vocationcontroller.text,
+      if(mobilecontroller.text != '')'mobile': mobilecontroller.text,
+      if(emailcontroller.text != '')'email': emailcontroller.text
     }) ;
     if(pickedImage != null) {
       request.files
@@ -227,16 +233,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: widget.user.data?.image !=null && widget.user.data?.image != ""? CircleAvatar(
                   radius: 50,
                   backgroundImage: NetworkImage(
-                      'http://13.127.11.171:3000/uploads/child/${widget.user.data!.image}'),
+                      'http://139.59.68.139:3000/uploads/${widget.user.data!.image}'),
                 ):(imagePaths != null
                     ? CircleAvatar(
                         radius: 50,
                         backgroundImage: FileImage(File(imagePaths!)),
                       )
                     : const CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.amber,
-                      )),
+                  radius: 50,
+                  backgroundImage: AssetImage('assets/images/empty.webp'),
+                  backgroundColor: Colors.white,
+                )),
               ),
               TextFormField(
                 controller: namecontroller,
@@ -309,6 +316,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ],
                 ),
+              ),
+              TextFormField(
+                controller: mobilecontroller,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                    hintText: 'Enter Your Mobile number', labelText: 'Mobile'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Mobile number Required';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              TextFormField(
+                controller: emailcontroller,
+                decoration: const InputDecoration(
+                    hintText: 'Enter Your Email', labelText: 'Email'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Email Required';
+                  } else {
+                    return null;
+                  }
+                },
               ),
               TextFormField(
                 controller: areacontroller,
