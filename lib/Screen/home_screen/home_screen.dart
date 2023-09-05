@@ -51,8 +51,33 @@ class HomeScreen extends GetView<HomeController> {
                     icon: const Icon(Icons.exit_to_app_rounded,color: Colors.black)),
               ),
             ),
+            20.heightBox,
+            ListTile(
+              title: const Text("settings").tr(),
+              leading: const Icon(
+                Icons.settings,
+                color: Colors.black,
+              ),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (ctx) => const SettingScreen()));
+              },
+            ),
+            20.heightBox,
+            ListTile(
+              title: const Text("refer to a friend").tr(),
+              leading: const Icon(
+                Icons.send_sharp,
+                color: Colors.black,
+              ),
+              onTap: () {
+                String linkToShare = 'Try this amazing app https://www.example.com - use my referral 1123456';
+                Share.share(linkToShare);
+              },
+            ),
+            20.heightBox,
             Padding(
-              padding: const EdgeInsets.only(left: 20, top: 20),
+              padding: const EdgeInsets.only(left: 15,top: 10),
               child: Row(
                 children: [
                   InkWell(
@@ -64,7 +89,7 @@ class HomeScreen extends GetView<HomeController> {
                     },
                     child: Obx(
                           () => CircleAvatar(
-                        radius: 30,
+                        radius: 13,
                         backgroundColor:
                         const Color.fromARGB(255, 239, 238, 235),
                         child: controller.imageURL.value != ''
@@ -91,7 +116,7 @@ class HomeScreen extends GetView<HomeController> {
                     ),
                   ),
                   const SizedBox(
-                    width: 15,
+                    width: 30,
                   ),
                   InkWell(
                     onTap: () {
@@ -120,31 +145,6 @@ class HomeScreen extends GetView<HomeController> {
                 ],
               ),
             ),
-            50.heightBox,
-            ListTile(
-              title: const Text("refer to a friend").tr(),
-              leading: const Icon(
-                Icons.send_sharp,
-                color: Colors.black,
-              ),
-              onTap: () {
-                String linkToShare = 'Try this amazing app https://www.example.com - use my referral 1123456';
-                Share.share(linkToShare);
-              },
-            ),
-            20.heightBox,
-            ListTile(
-              title: const Text("settings").tr(),
-              leading: const Icon(
-                Icons.settings,
-                color: Colors.black,
-              ),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (ctx) => const SettingScreen()));
-              },
-            ),
-            20.heightBox,
           ],
         ),
       ),

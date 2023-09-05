@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
         locale: context.locale,
         supportedLocales: context.supportedLocales,
         localizationsDelegates: context.localizationDelegates,
-        title: 'Flutter Demo',
+        title: 'Hukibu',
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
         ),
