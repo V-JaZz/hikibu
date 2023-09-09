@@ -1,6 +1,7 @@
 // ignore_for_file: body_might_complete_normally_catch_error
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:hukibu/Screen/auth_screen/email_auth/login_screen.dart';
 import 'package:hukibu/model/user_model.dart';
 import 'package:hukibu/routes/route_paths.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../home_screen/bottomnavigate.dart';
 import '../getx_helper/auth_controller.dart';
@@ -38,6 +40,25 @@ class SignUpScreen extends GetView<AuthController> {
             ),
           ),
         ),
+        actions: [
+          const Center(
+            child: Text('English'),
+          ),
+          Switch(
+            onChanged: (val) {
+              controller.toggleSwitch(val);
+            },
+            value: context.locale.toString() == 'en_US' ? false : true,
+            activeColor: Colors.purpleAccent,
+            activeTrackColor: Colors.purple,
+            inactiveThumbColor: Colors.deepPurple,
+            inactiveTrackColor: Colors.deepPurpleAccent,
+          ),
+          const Center(
+            child: Text('Turkish'),
+          ),
+          8.widthBox
+        ],
         backgroundColor: Colors.white,
         elevation: 0,
       ),

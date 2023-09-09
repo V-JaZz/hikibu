@@ -1,5 +1,6 @@
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_picker_dropdown.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:hukibu/routes/route_paths.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../getx_helper/auth_controller.dart';
 
@@ -35,6 +37,25 @@ class LoginScreen extends GetView<AuthController> {
           ),
         ),
         backgroundColor: Colors.white,
+        actions: [
+          const Center(
+            child: Text('English'),
+          ),
+          Switch(
+            onChanged: (val) {
+              controller.toggleSwitch(val);
+            },
+            value: context.locale.toString() == 'en_US' ? false : true,
+            activeColor: Colors.purpleAccent,
+            activeTrackColor: Colors.purple,
+            inactiveThumbColor: Colors.deepPurple,
+            inactiveTrackColor: Colors.deepPurpleAccent,
+          ),
+          const Center(
+            child: Text('Turkish'),
+          ),
+          8.widthBox
+        ],
         elevation: 0,
       ),
       body: Form(

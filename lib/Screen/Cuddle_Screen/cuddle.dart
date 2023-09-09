@@ -12,6 +12,8 @@ import 'dart:convert';
 
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import 'expert_support.dart';
+
 class CuddleScreen extends StatefulWidget {
   final int id;
   final dynamic youtubeUrl;
@@ -606,7 +608,12 @@ class _CuddleScreenState extends State<CuddleScreen>
                               context,
                               MaterialPageRoute(
                                   builder: (ctx) =>
-                                      CuddleDetails(id: widget.id)));
+                                  ContactForm(courseId: courseModel!.course.id.toString())));
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (ctx) =>
+                          //             CuddleDetails(id: widget.id)));
                           //  Navigator.push(
                           //         context,
                           //         MaterialPageRoute(
@@ -625,7 +632,7 @@ class _CuddleScreenState extends State<CuddleScreen>
                               border: Border.all(color: Colors.black)),
                           child: Center(
                             child: Text(
-                              'EXPERT SUPPLY'.tr(),
+                              'EXPERT SUPPORT'.tr(),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue),

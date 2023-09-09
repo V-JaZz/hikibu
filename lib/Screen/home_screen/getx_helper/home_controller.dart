@@ -21,7 +21,6 @@ class HomeController extends GetxController {
   HomeState state = HomeState();
   Rx<String> image = ''.obs;
   Rx<String> imageURL = ''.obs;
-  Rx<bool> isSwitched = false.obs;
   final searchController = TextEditingController();
   Rx<bool> viewAll = false.obs;
   Rx<bool> test = false.obs;
@@ -48,32 +47,6 @@ class HomeController extends GetxController {
         state.childList.add(ChildModel.fromJson(res.body));
       }
     }
-  }
-
-  void toggleSwitch(bool value) {
-    if (isSwitched.value == false) {
-      isSwitched.value = true;
-      changeLocale(Get.context!);
-
-    } else {
-      isSwitched.value = false;
-      changeLocale(Get.context!);
-    }
-    Get.defaultDialog(
-      title: 'Restart?',
-      content: const Text('Restart app now to apply changes!'),
-      confirm: TextButton(onPressed: (){Restart.restartApp();}, child: const Text('Ok')) ,
-      cancel: TextButton(onPressed: (){Get.back();}, child: const Text('Cancel'))
-    );
-  }
-
-  Future<void> changeLocale(BuildContext context) async {
-    if (isSwitched.value) {
-      context.setLocale(const Locale('en', 'US'));
-    } else {
-      context.setLocale(const Locale('tr', 'TR'));
-    }
-    update();
   }
 
 

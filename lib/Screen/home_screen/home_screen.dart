@@ -161,24 +161,6 @@ class HomeScreen extends GetView<HomeController> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        actions: [
-          const Center(
-            child: Text('English'),
-          ),
-          Switch(
-            onChanged: (val) {
-              controller.toggleSwitch(val);
-            },
-            value: context.locale.toString() == 'en_US' ? false : true,
-            activeColor: Colors.purpleAccent,
-            activeTrackColor: Colors.purple,
-            inactiveThumbColor: Colors.deepPurple,
-            inactiveTrackColor: Colors.deepPurpleAccent,
-          ),
-          const Center(
-            child: Text('Turkish'),
-          ),
-        ],
       ),
       body: Container(
         decoration: const BoxDecoration(

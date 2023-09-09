@@ -761,96 +761,94 @@ class _MyHomePageState extends State<AddANewChild> {
               _activeCurrentStep <= 0 ? StepState.editing : StepState.complete,
           isActive: _activeCurrentStep >= 0,
           title: const Text('Step 1'),
-          content: Container(
-            child: Column(
-              children: [
-                InkWell(
-                    onTap: () async {
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (builder) => BottomSheet());
-                      // Navigator.pop(context);
-                    },
-                    child: CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.white,
-                        child: _image != null
-                            ? ClipOval(
-                                child: Image.file(
-                                  _image!,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : ClipOval(
-                                child: Image.asset('assets/images/empty.webp'),
-                              ))),
-                const SizedBox(
-                  height: 8,
-                ),
-                TextField(
-                  controller: fullName,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Full Name',
-                      hintText: 'Enter Child Name'),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                TextField(
-                  controller: nickName,
-                  decoration: const InputDecoration(
+          content: Column(
+            children: [
+              InkWell(
+                  onTap: () async {
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (builder) => BottomSheet());
+                    // Navigator.pop(context);
+                  },
+                  child: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.white,
+                      child: _image != null
+                          ? ClipOval(
+                              child: Image.file(
+                                _image!,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : ClipOval(
+                              child: Image.asset('assets/images/empty.webp'),
+                            ))),
+              const SizedBox(
+                height: 8,
+              ),
+              TextField(
+                controller: fullName,
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Nick Name',
+                    labelText: 'Full Name',
+                    hintText: 'Enter Child Name'),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              TextField(
+                controller: nickName,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Nick Name',
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              //  GenderSelector()
+              Wrap(
+                spacing: 8.0,
+                children: <Widget>[
+                  ChoiceChip(
+                    label: const Text(
+                      'Male',
+                    ),
+                    selected: selectedGender == 'Male',
+                    selectedColor: const Color.fromARGB(255, 158, 100, 169),
+                    onSelected: (bool selected) {
+                      setState(() {
+                        selectedGender = (selected ? 'Male' : null)!;
+                        print(selectedGender);
+                      });
+                    },
                   ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                //  GenderSelector()
-                Wrap(
-                  spacing: 8.0,
-                  children: <Widget>[
-                    ChoiceChip(
-                      label: const Text(
-                        'Male',
-                      ),
-                      selected: selectedGender == 'Male',
-                      selectedColor: const Color.fromARGB(255, 158, 100, 169),
-                      onSelected: (bool selected) {
-                        setState(() {
-                          selectedGender = (selected ? 'Male' : null)!;
-                          print(selectedGender);
-                        });
-                      },
-                    ),
-                    ChoiceChip(
-                      label: const Text('Female'),
-                      selected: selectedGender == 'Female',
-                      selectedColor: const Color.fromARGB(255, 158, 100, 169),
-                      onSelected: (bool selected) {
-                        setState(() {
-                          selectedGender = (selected ? 'Female' : null)!;
-                          print(selectedGender);
-                        });
-                      },
-                    ),
-                    ChoiceChip(
-                      label: const Text('Other'),
-                      selected: selectedGender == 'Other',
-                      selectedColor: const Color.fromARGB(255, 158, 100, 169),
-                      onSelected: (bool selected) {
-                        setState(() {
-                          selectedGender = (selected ? 'Other' : null)!;
-                          print(selectedGender);
-                        });
-                      },
-                    ),
-                  ],
-                )
-              ],
-            ),
+                  ChoiceChip(
+                    label: const Text('Female'),
+                    selected: selectedGender == 'Female',
+                    selectedColor: const Color.fromARGB(255, 158, 100, 169),
+                    onSelected: (bool selected) {
+                      setState(() {
+                        selectedGender = (selected ? 'Female' : null)!;
+                        print(selectedGender);
+                      });
+                    },
+                  ),
+                  ChoiceChip(
+                    label: const Text('Other'),
+                    selected: selectedGender == 'Other',
+                    selectedColor: const Color.fromARGB(255, 158, 100, 169),
+                    onSelected: (bool selected) {
+                      setState(() {
+                        selectedGender = (selected ? 'Other' : null)!;
+                        print(selectedGender);
+                      });
+                    },
+                  ),
+                ],
+              )
+            ],
           ),
         ),
         // This is Step2 here we will enter our address

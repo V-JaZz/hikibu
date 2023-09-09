@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:hukibu/services/firebase.dart';
 import 'package:hukibu/services/user.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:otp_text_field/otp_field.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:twitter_login/twitter_login.dart';
 import 'package:http/http.dart'as http;
 import '../../../API/api_client.dart';
@@ -33,6 +35,34 @@ class AuthController extends GetxController {
   String? phoneNo;
   String initialCountry = 'IN';
   PhoneNumber number = PhoneNumber(isoCode: 'IN');
+  Rx<bool> isSwitched = false.obs;
+
+
+  void toggleSwitch(bool value) {
+    if (isSwitched.value == false) {
+      isSwitched.value = true;
+      changeLocale(Get.context!);
+
+    } else {
+      isSwitched.value = false;
+      changeLocale(Get.context!);
+    }
+    Get.defaultDialog(
+        title: 'Restart?',
+        content: const Text('Restart app now to apply changes!'),
+        confirm: TextButton(onPressed: (){Restart.restartApp();}, child: const Text('Ok')) ,
+        cancel: TextButton(onPressed: (){Get.back();}, child: const Text('Cancel'))
+    );
+  }
+
+  Future<void> changeLocale(BuildContext context) async {
+    if (isSwitched.value) {
+      context.setLocale(const Locale('en', 'US'));
+    } else {
+      context.setLocale(const Locale('tr', 'TR'));
+    }
+    update();
+  }
 
   sendLoginOTP() async {
     isLoading.value = true;
