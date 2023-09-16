@@ -1,22 +1,21 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:hukibu/Screen/auth_screen/email_auth/login_screen.dart';
+import 'package:get/route_manager.dart';
 import 'package:hukibu/routes/route_paths.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
+import '../../model/on_boarding_model.dart';
+
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+  final OnBoardingModel onBoard;
+  const OnboardingScreen({super.key, required this.onBoard});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-
-  Widget _buildImage(String assetName, [double width = 350]) {
-    return Image.asset('assets/images/$assetName', width: width);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +62,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(left: 80.w),
-                  child: const Text('Get Started'),
+                  child: Text('Get Started'.tr()),
                 ),
                 SizedBox(
                   width: 5.w,
@@ -79,37 +78,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
         ),
-        pages: [
-          PageViewModel(
-            title: "Continuous Evaluations",
-            body:
-                "Be more aware about your child.Learing stages, difficulties,interests,intelligens,domains and more.",
-            image: _buildImage('img1.png'),
-            decoration: pageDecoration,
-          ),
-          PageViewModel(
-            title: "Professional Help",
-            body:
-                "Personalized parenting assistance and professional help, just a click away.",
-            image: _buildImage('img2.png'),
-            decoration: pageDecoration,
-          ),
-          PageViewModel(
-            title: "Personalized Learning Activities",
-            body:
-                "Daily learning activites, personlised for you child easy for the parent .Make the best use of your time with your child",
-            image: _buildImage('img3.png'),
-            decoration: pageDecoration,
-          ),
-          PageViewModel(
-            title: "Delightful Home Learning",
-            body:
-                "Super powers of knowledge and structure to parent .Making Home learning a delightful experience",
-            image: _buildImage('img4.png'),
-            decoration: pageDecoration,
-            // reverse: true,
-          ),
-        ],
+        pages: List.generate(widget.onBoard.data?.length??0, (index) =>
+            PageViewModel(
+              title: widget.onBoard.data![index].title,
+              body: widget.onBoard.data![index].description,
+              image: Image.network(
+                  'http://139.59.68.139:3000/uploads/${widget.onBoard.data?[index].image ?? ''}',
+                  width: 350),
+              decoration: pageDecoration,
+            )),
         onDone: () {},
         back: const Icon(Icons.arrow_back),
         skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)),

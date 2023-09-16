@@ -54,10 +54,15 @@ class ChatListScreen extends GetView<RecentChatController> {
             20.heightBox,
             ListTile(
               title: const Text("settings").tr(),
-              leading: const Icon(
-                Icons.settings,
-                color: Colors.black,
-              ),
+              leading: CircleAvatar(
+                  radius: 13,
+                  backgroundColor:
+                  const Color.fromARGB(255, 239, 238, 235),
+                  child: ClipOval(
+                    child:
+                    Image.asset('assets/images/empty.webp'),
+                  ),
+                ),
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (ctx) => const SettingScreen()));
@@ -81,23 +86,10 @@ class ChatListScreen extends GetView<RecentChatController> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  InkWell(
-                    onTap: () async {
-                      // showModalBottomSheet(
-                      //   context: context,
-                      //   builder: (builder) => controller.bottomSheet(),
-                      // );
-                    },
-                    child:  CircleAvatar(
-                      radius: 13,
-                      backgroundColor:
-                      const Color.fromARGB(255, 239, 238, 235),
-                      child: ClipOval(
-                        child:
-                        Image.asset('assets/images/empty.webp'),
-                      ),
-                    )
-                  ),
+                    const Icon(
+                      Icons.settings,
+                      color: Colors.black,
+                    ),
                   const SizedBox(
                     width: 30,
                   ),

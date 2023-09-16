@@ -6,17 +6,19 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_field/date_field.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get/route_manager.dart';
 import 'package:hukibu/Screen/setting_screen.dart';
 import 'package:hukibu/components/survey_question.dart';
 import 'package:hukibu/model/add_a_child.dart';
+import 'package:hukibu/model/survey_quest_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -412,6 +414,8 @@ class _MyHomePageState extends State<AddANewChild> {
   String? name;
   String? pdf;
 
+  SurveyQuestModel surveyQuestModel = SurveyQuestModel();
+
   // final firebase_storage.FirebaseStorage _storage =
   //     firebase_storage.FirebaseStorage.instance;
 
@@ -494,29 +498,29 @@ class _MyHomePageState extends State<AddANewChild> {
   //   }
   // }
 
-  void submitButtonClicked() async {
-    if (_image != null) {
-      // Prepare data
-      final data = AddAChild(
-        childImage: _image!,
-        name: fullName.text,
-        nickname: nickName.text,
-        relation: selectedRelation,
-        gender: selectedGender,
-        dob: selectedDate.toString(),
-        age: '',
-        questions: questionResponses.valuesList(),
-      );
-
-      // Convert data to JSON
-      final jsonData = data.toJson();
-
-      // Send POST request
-      await postChildData(jsonData);
-    } else {
-      print('Image not selected');
-    }
-  }
+  // void submitButtonClicked() async {
+  //   if (_image != null) {
+  //     // Prepare data
+  //     final data = AddAChild(
+  //       childImage: _image!,
+  //       name: fullName.text,
+  //       nickname: nickName.text,
+  //       relation: selectedRelation,
+  //       gender: selectedGender,
+  //       dob: selectedDate.toString(),
+  //       age: '',
+  //       questions: questionResponses.valuesList(),
+  //     );
+  //
+  //     // Convert data to JSON
+  //     final jsonData = data.toJson();
+  //
+  //     // Send POST request
+  //     await postChildData(jsonData);
+  //   } else {
+  //     print('Image not selected');
+  //   }
+  // }
 
   postchild() async {
     var request = http.MultipartRequest(
@@ -529,7 +533,7 @@ class _MyHomePageState extends State<AddANewChild> {
       'dob': DateFormat('yyyy-MM-dd').format(selectedDate),
       // 'age': selectedDate.difference(DateTime.now()).toString(),
       'age':'${DateTime.now().difference(selectedDate).inDays}',
-      'questions': questionResponses.valuesList().toString(),
+      'questions': List<dynamic>.from(surveyQuestModel.data!.map((x) => x.toJson())).toString(),
     });
     request.files
         .add(await http.MultipartFile.fromPath('childImage', _image!.path));
@@ -732,24 +736,24 @@ class _MyHomePageState extends State<AddANewChild> {
   //   // }
   // }
 
-  Map<String, bool> questionResponses = {
-    "calm himself by bringing hand to mouth?": false,
-    "express emotions like pleasure and discomfort": false,
-    "try to look for his parent": false,
-    "recognize family faces": false,
-    "smile at familiar faces": false,
-    "respond positively to touch": false,
-    "make gurgling sound": false,
-    "cry differently on different need": false,
-    "try to imitate sound": false,
-    "follow people with his eyes": false,
-    "follow object with his eyes": false,
-    "observe faces with interest": false,
-    "raise his head lying on his stomach": false,
-    "bring his hand to his mouth": false,
-    "try to touch dangling objects": false,
-    "has started to smile at others": false
-  };
+  // Map<String, bool> questionResponses = {
+  //   "calm himself by bringing hand to mouth?": false,
+  //   "express emotions like pleasure and discomfort": false,
+  //   "try to look for his parent": false,
+  //   "recognize family faces": false,
+  //   "smile at familiar faces": false,
+  //   "respond positively to touch": false,
+  //   "make gurgling sound": false,
+  //   "cry differently on different need": false,
+  //   "try to imitate sound": false,
+  //   "follow people with his eyes": false,
+  //   "follow object with his eyes": false,
+  //   "observe faces with interest": false,
+  //   "raise his head lying on his stomach": false,
+  //   "bring his hand to his mouth": false,
+  //   "try to touch dangling objects": false,
+  //   "has started to smile at others": false
+  // };
 
 // Here we have created list of steps
 // that are required to complete the form
@@ -760,7 +764,7 @@ class _MyHomePageState extends State<AddANewChild> {
           state:
               _activeCurrentStep <= 0 ? StepState.editing : StepState.complete,
           isActive: _activeCurrentStep >= 0,
-          title: const Text('Step 1'),
+          title: Text('Step 1'.tr()),
           content: Column(
             children: [
               InkWell(
@@ -789,19 +793,19 @@ class _MyHomePageState extends State<AddANewChild> {
               ),
               TextField(
                 controller: fullName,
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Full Name',
-                    hintText: 'Enter Child Name'),
+                decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: 'Full Name'.tr()
+                ),
               ),
               const SizedBox(
                 height: 8,
               ),
               TextField(
                 controller: nickName,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Nick Name',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: 'Nick Name'.tr(),
                 ),
               ),
               const SizedBox(
@@ -812,36 +816,36 @@ class _MyHomePageState extends State<AddANewChild> {
                 spacing: 8.0,
                 children: <Widget>[
                   ChoiceChip(
-                    label: const Text(
-                      'Male',
+                    label: Text(
+                      'Male'.tr(),
                     ),
-                    selected: selectedGender == 'Male',
+                    selected: selectedGender == 'Male'.tr(),
                     selectedColor: const Color.fromARGB(255, 158, 100, 169),
                     onSelected: (bool selected) {
                       setState(() {
-                        selectedGender = (selected ? 'Male' : null)!;
+                        selectedGender = (selected ? 'Male'.tr() : null)!;
                         print(selectedGender);
                       });
                     },
                   ),
                   ChoiceChip(
-                    label: const Text('Female'),
-                    selected: selectedGender == 'Female',
+                    label: Text('Female'.tr()),
+                    selected: selectedGender == 'Female'.tr(),
                     selectedColor: const Color.fromARGB(255, 158, 100, 169),
                     onSelected: (bool selected) {
                       setState(() {
-                        selectedGender = (selected ? 'Female' : null)!;
+                        selectedGender = (selected ? 'Female'.tr() : null)!;
                         print(selectedGender);
                       });
                     },
                   ),
                   ChoiceChip(
-                    label: const Text('Other'),
-                    selected: selectedGender == 'Other',
+                    label: Text('Other'.tr()),
+                    selected: selectedGender == 'Other'.tr(),
                     selectedColor: const Color.fromARGB(255, 158, 100, 169),
                     onSelected: (bool selected) {
                       setState(() {
-                        selectedGender = (selected ? 'Other' : null)!;
+                        selectedGender = (selected ? 'Other'.tr() : null)!;
                         print(selectedGender);
                       });
                     },
@@ -857,85 +861,83 @@ class _MyHomePageState extends State<AddANewChild> {
                 ? StepState.editing
                 : StepState.complete,
             isActive: _activeCurrentStep >= 1,
-            title: const Text('Step 2'),
-            content: Container(
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 8,
+            title: Text('Step 2'.tr()),
+            content: Column(
+              children: [
+                const SizedBox(
+                  height: 8,
+                ),
+                DateTimeFormField(
+                  decoration: InputDecoration(
+                    hintStyle: const TextStyle(color: Colors.black45),
+                    errorStyle: const TextStyle(color: Colors.redAccent),
+                    border: const OutlineInputBorder(),
+                    suffixIcon: const Icon(Icons.event_note),
+                    labelText: 'Date of Birth'.tr(),
                   ),
-                  DateTimeFormField(
-                    decoration: const InputDecoration(
-                      hintStyle: TextStyle(color: Colors.black45),
-                      errorStyle: TextStyle(color: Colors.redAccent),
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.event_note),
-                      labelText: 'Date of Birth',
-                    ),
-                    mode: DateTimeFieldPickerMode.date,
-                    autovalidateMode: AutovalidateMode.always,
-                    validator: (e) =>
-                        (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
-                    // onDateSelected: (DateTime selectedDate) {
-                    //   print(selectedDate);
-                    // },
+                  mode: DateTimeFieldPickerMode.date,
+                  autovalidateMode: AutovalidateMode.always,
+                  validator: (e) =>
+                      (e?.day ?? 0) == 1 ? 'Please not the first day'.tr() : null,
+                  // onDateSelected: (DateTime selectedDate) {
+                  //   print(selectedDate);
+                  // },
 
-                    onDateSelected: (DateTime value) {
-                      setState(() {
-                        print(value);
-                        selectedDate = value;
-                        print(
-                            ">>>>>>>>>>>>>>>>>>>>selectedDate : $selectedDate");
-                      });
-                    },
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  // RelationSelector()
-                  const Text('Your relation with kid :'),
-                  Wrap(
-                    spacing: 8.0,
-                    children: <Widget>[
-                      ChoiceChip(
-                        label: const Text(
-                          'MOM',
-                        ),
-                        selected: selectedRelation == 'Mom',
-                        selectedColor: const Color.fromARGB(255, 158, 100, 169),
-                        onSelected: (bool selected) {
-                          setState(() {
-                            selectedRelation = (selected ? 'Mom' : null)!;
-                            print(selectedRelation);
-                          });
-                        },
+                  onDateSelected: (DateTime value) {
+                    setState(() {
+                      print(value);
+                      selectedDate = value;
+                      print(
+                          ">>>>>>>>>>>>>>>>>>>>selectedDate : $selectedDate");
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                // RelationSelector()
+                Text('Your relation with kid :'.tr()),
+                Wrap(
+                  spacing: 8.0,
+                  children: <Widget>[
+                    ChoiceChip(
+                      label: Text(
+                        'MOM'.tr(),
                       ),
-                      ChoiceChip(
-                        label: const Text('DAD'),
-                        selected: selectedRelation == 'Dad',
-                        selectedColor: const Color.fromARGB(255, 158, 100, 169),
-                        onSelected: (bool selected) {
-                          setState(() {
-                            selectedRelation = (selected ? 'Dad' : null)!;
-                            print(selectedRelation);
-                          });
-                        },
-                      ),
-                      ChoiceChip(
-                        label: const Text('Other'),
-                        selected: selectedRelation == 'Other',
-                        selectedColor: const Color.fromARGB(255, 158, 100, 169),
-                        onSelected: (bool selected) {
-                          setState(() {
-                            selectedRelation = (selected ? 'Other' : null)!;
-                            print(selectedRelation);
-                          });
-                        },
-                      ),
-                    ],
-                  )
-                ],
-              ),
+                      selected: selectedRelation == 'Mom'.tr(),
+                      selectedColor: const Color.fromARGB(255, 158, 100, 169),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          selectedRelation = (selected ? 'Mom'.tr() : null)!;
+                          print(selectedRelation);
+                        });
+                      },
+                    ),
+                    ChoiceChip(
+                      label: Text('DAD'.tr()),
+                      selected: selectedRelation == 'Dad'.tr(),
+                      selectedColor: const Color.fromARGB(255, 158, 100, 169),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          selectedRelation = (selected ? 'Dad'.tr() : null)!;
+                          print(selectedRelation);
+                        });
+                      },
+                    ),
+                    ChoiceChip(
+                      label: Text('Other'.tr()),
+                      selected: selectedRelation == 'Other'.tr(),
+                      selectedColor: const Color.fromARGB(255, 158, 100, 169),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          selectedRelation = (selected ? 'Other'.tr() : null)!;
+                          print(selectedRelation);
+                        });
+                      },
+                    ),
+                  ],
+                )
+              ],
             )),
 
         // This is Step3 here we will display all the details
@@ -943,55 +945,75 @@ class _MyHomePageState extends State<AddANewChild> {
         Step(
             state: StepState.complete,
             isActive: _activeCurrentStep >= 2,
-            title: const Text('Quiz'),
-            content: ListView(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              children: questionResponses.entries.map((entry) {
-                final question = entry.key;
-                final response = entry.value;
+            title: Text('Quiz'.tr()),
+            content: Builder(
+              builder: (context) {
+              if(loading == true){
+                return Center(child: Column(
+                  children: [
+                    const CircularProgressIndicator(),
+                    10.heightBox,
+                    Text('Please wait...'.tr())
+                  ],
+                ));
+              }else if(surveyQuestModel.success == false){
+                return Center(child: Text('error!'.tr()));
+              }else {
+                List<QuestAns> questAns = surveyQuestModel.data??[];
+                return ListView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    children: questAns.map((questAns) {
 
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: response
-                            ? const Color.fromARGB(255, 103, 43, 215)
-                            : Colors.grey,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: SwitchListTile(
-                      activeColor: const Color.fromARGB(255, 103, 43, 215),
-                      title: Text(question),
-                      value: response,
-                      onChanged: (value) {
-                        // Update the response
+                      final String question = questAns.question??'';
+                      bool response = questAns.answer??false;
 
-                        questionResponses[question] = value;
-
-                        setState(() {});
-                      },
-                    ),
-                  ),
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: response
+                                  ? const Color.fromARGB(255, 103, 43, 215)
+                                  : Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: SwitchListTile(
+                            activeColor: const Color.fromARGB(255, 103, 43, 215),
+                            title: Text(question),
+                            value: response,
+                            onChanged: (value) {
+                              setState(() {
+                                surveyQuestModel.data![surveyQuestModel.data!.indexOf(questAns)].answer = value;
+                              });
+                            },
+                          ),
+                        ),
+                      );
+                    }).toList()
                 );
-              }).toList(),
-            )
+              }
+            })
         )
       ];
 
   bool adding = false;
-
+  bool loading = true;
+  @override
+  void initState() {
+    getSurveyQuest();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 90, 32, 100),
-        title: const Text(
-          'Enter Child Details',
+        title: Text(
+          'Enter Child Details'.tr(),
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -1007,52 +1029,17 @@ class _MyHomePageState extends State<AddANewChild> {
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                  onPressed: (){
+              Visibility(
+                visible: !loading,
+                child: ElevatedButton(
+                    onPressed: (){
 
-                    print(_activeCurrentStep);
+                      print(_activeCurrentStep);
 
-                    if (_activeCurrentStep == 0 && _image?.path == null) {
-                      Get.snackbar(
-                        'Error',
-                        'Select an image to continue',
-                        snackStyle: SnackStyle.FLOATING,
-                        icon: const Icon(
-                          Icons.person,
-                          color: Color(0xff28282B),
-                        ),
-                        snackPosition: SnackPosition.BOTTOM,
-                        backgroundColor: Colors.grey[200],
-                        borderRadius: 10,
-                        margin: const EdgeInsets.all(10),
-                        padding: const EdgeInsets.all(15),
-                        colorText: const Color(0xff28282B),
-                        duration: const Duration(seconds: 4),
-                        isDismissible: true,
-                        forwardAnimationCurve: Curves.easeOutBack,
-                      );
-                      return;
-                    }
-
-                    if (_activeCurrentStep < (stepList().length - 1)) {
-                      setState(() {
-                        _activeCurrentStep += 1;
-                      });
-                    }
-
-                    if (_activeCurrentStep == stepList().length - 1) {
-
-                      if(_image?.path != null){
-                        if(!adding){
-                          setState(() {
-                            adding = true;
-                          });
-                          postchild();
-                        }
-                      }else{
+                      if (_activeCurrentStep == 0 && _image?.path == null) {
                         Get.snackbar(
-                          'Error',
-                          'Select an image in step 1 to continue',
+                          'Error'.tr(),
+                          'Select an image to continue'.tr(),
                           snackStyle: SnackStyle.FLOATING,
                           icon: const Icon(
                             Icons.person,
@@ -1068,11 +1055,49 @@ class _MyHomePageState extends State<AddANewChild> {
                           isDismissible: true,
                           forwardAnimationCurve: Curves.easeOutBack,
                         );
+                        return;
                       }
-                    }
 
-                  },
-                  child: Text(adding?'Please Wait..':'Continue')
+                      if (_activeCurrentStep < (stepList().length - 1)) {
+                        setState(() {
+                          _activeCurrentStep += 1;
+                        });
+                      }
+
+                      if (_activeCurrentStep == stepList().length - 1) {
+
+                        if(_image?.path != null){
+                          if(!adding){
+                            setState(() {
+                              adding = true;
+                            });
+                            postchild();
+                          }
+                        }else{
+                          Get.snackbar(
+                            'Error'.tr(),
+                            'Select an image in step 1 to continue'.tr(),
+                            snackStyle: SnackStyle.FLOATING,
+                            icon: const Icon(
+                              Icons.person,
+                              color: Color(0xff28282B),
+                            ),
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: Colors.grey[200],
+                            borderRadius: 10,
+                            margin: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(15),
+                            colorText: const Color(0xff28282B),
+                            duration: const Duration(seconds: 4),
+                            isDismissible: true,
+                            forwardAnimationCurve: Curves.easeOutBack,
+                          );
+                        }
+                      }
+
+                    },
+                    child: Text(adding?'Please Wait..'.tr():'Continue'.tr())
+                ),
               ),
             ],
           );
@@ -1307,14 +1332,32 @@ class _MyHomePageState extends State<AddANewChild> {
       // ),
     );
   }
+
+  Future<SurveyQuestModel> getSurveyQuest() async {
+
+    var response = await http.get(Uri.parse('http://139.59.68.139:3000/admin-get-all-survey'));
+    setState(() {
+      loading = false;
+    });
+    if (response.statusCode == 200) {
+      surveyQuestModel = surveyQuestModelFromJson(response.body);
+    }
+    else {
+    print(response.reasonPhrase);
+    surveyQuestModel = SurveyQuestModel(success: false);
+    }
+    return surveyQuestModel;
+  }
 }
 
 class GenderSelector extends StatefulWidget {
+  const GenderSelector({super.key});
+
   @override
-  _GenderSelectorState createState() => _GenderSelectorState();
+  GenderSelectorState createState() => GenderSelectorState();
 }
 
-class _GenderSelectorState extends State<GenderSelector> {
+class GenderSelectorState extends State<GenderSelector> {
   late String selectedGender = '';
 
   @override
@@ -1363,11 +1406,13 @@ class _GenderSelectorState extends State<GenderSelector> {
 }
 
 class RelationSelector extends StatefulWidget {
+  const RelationSelector({super.key});
+
   @override
-  _RelationSelectorState createState() => _RelationSelectorState();
+  RelationSelectorState createState() => RelationSelectorState();
 }
 
-class _RelationSelectorState extends State<RelationSelector> {
+class RelationSelectorState extends State<RelationSelector> {
   late String selectedRelation = '';
 
   @override

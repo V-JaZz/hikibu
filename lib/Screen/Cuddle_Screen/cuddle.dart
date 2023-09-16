@@ -633,7 +633,7 @@ class _CuddleScreenState extends State<CuddleScreen>
                           child: Center(
                             child: Text(
                               'EXPERT SUPPORT'.tr(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue),
                             ),

@@ -1,7 +1,6 @@
 class RoutePaths {
 
   static String splashScreen = '/splashScreen';
-  static String onBoardingScreen = '/onBoardingScreen';
 
 
   static String loginScreen = '/loginScreen';

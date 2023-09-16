@@ -1,19 +1,13 @@
 // ignore_for_file: body_might_complete_normally_catch_error
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:hukibu/Screen/auth_screen/email_auth/login_screen.dart';
-import 'package:hukibu/model/user_model.dart';
+import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:get/route_manager.dart';
 import 'package:hukibu/routes/route_paths.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:velocity_x/velocity_x.dart';
-
-import '../../home_screen/bottomnavigate.dart';
 import '../getx_helper/auth_controller.dart';
 
 class SignUpScreen extends GetView<AuthController> {
@@ -70,21 +64,21 @@ class SignUpScreen extends GetView<AuthController> {
               const SizedBox(
                 height: 50,
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 20),
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
                 child: Text(
-                  'Complete your profile Sign up',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  'Complete your profile Sign up'.tr(),
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(
                 height: 10,
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 20),
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
                 child: Text(
-                  'Enter the following details',
-                  style: TextStyle(
+                  'Enter the following details'.tr(),
+                  style: const TextStyle(
                     fontSize: 15,
                   ),
                 ),
@@ -102,13 +96,12 @@ class SignUpScreen extends GetView<AuthController> {
                       padding: const EdgeInsets.only(left: 20,right: 20,top: 20),
                       child: TextFormField(
                         controller: controller.usernameController,
-                        decoration: const InputDecoration(
-                          hintText: 'Enter Your Username',
-                          labelText: 'Username',
+                        decoration: InputDecoration(
+                          labelText: 'Username'.tr(),
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Username Required';
+                            return 'Username Required'.tr();
                           } else {
                             return null;
                           }
@@ -119,14 +112,13 @@ class SignUpScreen extends GetView<AuthController> {
                       padding: const EdgeInsets.only(left: 20,right: 20),
                       child: TextFormField(
                         controller: controller.emailController,
-                        decoration: const InputDecoration(
-                          hintText: 'Enter Your Email',
-                          labelText: 'Email',
+                        decoration: InputDecoration(
+                          labelText: 'Email'.tr(),
                         ),
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'email Required';
+                            return 'Email Required'.tr();
                           } else {
                             return null;
                           }
@@ -163,7 +155,7 @@ class SignUpScreen extends GetView<AuthController> {
                           ),
                         ),
                         cursorColor: Colors.transparent,
-                        hintText: "Enter your mobile number",
+                        hintText: "Enter Your Phone Number".tr(),
                         spaceBetweenSelectorAndTextField: 1,
                         keyboardType: const TextInputType.numberWithOptions(
                             signed: true, decimal: true),
@@ -185,11 +177,11 @@ class SignUpScreen extends GetView<AuthController> {
                           if(controller.phoneNo?.length == 13){
                             return null;
                           }
-                          return "Invalid Phone Number";
+                          return "Invalid Phone Number".tr();
                         },
                       ),
                     ),
-                    SizedBox(height: 12)
+                    const SizedBox(height: 12)
                     // Padding(
                     //   padding: const EdgeInsets.only(left: 20),
                     //   child: TextFormField(
@@ -229,10 +221,10 @@ class SignUpScreen extends GetView<AuthController> {
                       color: const Color.fromARGB(255, 103, 43, 215),
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        'Verify',
-                        style: TextStyle(
+                        'Verify'.tr(),
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -248,10 +240,10 @@ class SignUpScreen extends GetView<AuthController> {
               Center(
                 child: Text.rich(
                   TextSpan(
-                    text: "Don't have a account ",
+                    text: "Don't have a account ".tr(),
                     children: [
                       TextSpan(
-                        text: "Login?",
+                        text: "Login?".tr(),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             Get.offAllNamed(RoutePaths.loginScreen);

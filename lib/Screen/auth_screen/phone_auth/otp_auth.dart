@@ -1,10 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
 import 'package:otp_text_field/style.dart';
-import 'package:velocity_x/velocity_x.dart';
-import '../../../routes/route_paths.dart';
 import '../getx_helper/auth_controller.dart';
 
 class OTPScreen extends GetView<AuthController> {
@@ -26,8 +26,8 @@ class OTPScreen extends GetView<AuthController> {
           const SizedBox(
             height: 20,
           ),
-          const Text(
-            'Enter OTP',
+          Text(
+            'Enter OTP'.tr(),
             style: TextStyle(fontSize: 15, color: Colors.black),
           ),
           const SizedBox(
@@ -71,9 +71,9 @@ class OTPScreen extends GetView<AuthController> {
                           ?const CircularProgressIndicator(
                         color: Colors.white,
                       )
-                      :const Text(
-                        'Verify',
-                        style: TextStyle(
+                      :Text(
+                        'Verify'.tr(),
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 15,
                           fontWeight: FontWeight.bold,

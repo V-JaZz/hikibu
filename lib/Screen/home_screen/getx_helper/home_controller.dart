@@ -14,22 +14,36 @@ import '../../../main.dart';
 import '../../../model/app_data/child_model.dart';
 import '../../../model/get_activities.dart';
 import '../../../model/get_courses.dart';
+import '../../../services/storage.dart';
 import '../../../services/user.dart';
 
 class HomeController extends GetxController {
 
   HomeState state = HomeState();
   Rx<String> image = ''.obs;
+  Rx<String> activitySearchValue = ''.obs;
+  Rx<String> courseSearchValue = ''.obs;
   Rx<String> imageURL = ''.obs;
-  final searchController = TextEditingController();
   Rx<bool> viewAll = false.obs;
   Rx<bool> test = false.obs;
+  Rx<int> visibleActivitiesCount = 4.obs;
+  Rx<int> visibleCoursesCount = 4.obs;
 
   RxList<Course> courses = <Course>[].obs;
   RxList<Course> filteredCourseList = <Course>[].obs;
 
   RxList<Activity> activities = <Activity>[].obs;
   RxList<Activity> filteredActivitiesList = <Activity>[].obs;
+  late List<String> activityLog ;
+  late List<String> coursesLog ;
+
+  void showMoreActivities() {
+      visibleActivitiesCount.value += 4;
+  }
+
+  void showMoreCourses() {
+    visibleCoursesCount.value += 4;
+  }
 
   @override
   Future<void> onInit() async {
@@ -42,18 +56,18 @@ class HomeController extends GetxController {
       'http://139.59.68.139:3000/getChildById/${UserStore.to.uid}'
     );
     print(res.body);
-    if ((res.body??[]) != []){
+    if ((res.body??[]).toString() != '[]'){
       for(var child in res.body){
         state.childList.add(ChildModel.fromJson(res.body));
       }
     }
   }
 
-
     getImageFromGallery() async {
     final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
     );
+
     if (pickedFile != null) {
       image.value = pickedFile.path;
       Response res = await ApiClient.to.postData(
@@ -91,6 +105,9 @@ class HomeController extends GetxController {
   }
 
   void filterCourses(String query) {
+
+    courseSearchValue.value = query;
+
     filteredCourseList.assignAll(
       courses.where(
             (course) => course.courseName!.toLowerCase().contains(query.toLowerCase()),
@@ -105,6 +122,9 @@ class HomeController extends GetxController {
   }
 
   void filterActivities(String query) {
+
+    activitySearchValue.value = query;
+
     filteredActivitiesList.assignAll(
       activities.where(
             (activity) => activity.name!.toLowerCase().contains(query.toLowerCase()),

@@ -26,11 +26,6 @@ class RouteClass {
       name: RoutePaths.splashScreen,
       page: () => const SplashScreen(),
     ),
-    GetPage(
-      name: RoutePaths.onBoardingScreen,
-      page: () => const OnboardingScreen(),
-    ),
-
 
     ///Authentication Screen
     GetPage(

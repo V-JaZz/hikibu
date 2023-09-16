@@ -5,7 +5,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:get/route_manager.dart';
 import 'package:hukibu/routes/route_paths.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -66,11 +68,11 @@ class LoginScreen extends GetView<AuthController> {
             const SizedBox(
               height: 50,
             ),
-            const Padding(
-              padding: EdgeInsets.only(left: 20),
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
               child: Text(
-                'Complete your profile',
-                style: TextStyle(
+                'Complete your profile'.tr(),
+                style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
@@ -79,11 +81,11 @@ class LoginScreen extends GetView<AuthController> {
             const SizedBox(
               height: 10,
             ),
-            const Padding(
-              padding: EdgeInsets.only(left: 20),
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
               child: Text(
-                'Enter Your Phone Number',
-                style: TextStyle(
+                'Enter Your Phone Number'.tr(),
+                style: const TextStyle(
                   fontSize: 15,
                 ),
               ),
@@ -122,7 +124,7 @@ class LoginScreen extends GetView<AuthController> {
                   ),
                 ),
                 cursorColor: Colors.transparent,
-                hintText: "Enter your mobile number",
+                hintText: 'Enter Your Phone Number'.tr(),
                 spaceBetweenSelectorAndTextField: 1,
                 keyboardType: const TextInputType.numberWithOptions(
                     signed: true, decimal: true),
@@ -144,7 +146,7 @@ class LoginScreen extends GetView<AuthController> {
                   if(controller.phoneNo?.length == 13){
                     return null;
                   }
-                  return "Invalid Phone Number";
+                  return "Invalid Phone Number".tr();
                 },
               ),
             ),
@@ -174,9 +176,9 @@ class LoginScreen extends GetView<AuthController> {
                             ? const CircularProgressIndicator(
                           color: Colors.white,
                         )
-                            :const Text(
-                          'Login',
-                          style: TextStyle(
+                            :Text(
+                          'Login'.tr(),
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -250,10 +252,10 @@ class LoginScreen extends GetView<AuthController> {
             Center(
               child: Text.rich(
                 TextSpan(
-                  text: "Don't have a account ",
+                  text: "Don't have a account ".tr(),
                   children: [
                     TextSpan(
-                      text: "Register?",
+                      text: "Register?".tr(),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           Get.toNamed(RoutePaths.createAccount);

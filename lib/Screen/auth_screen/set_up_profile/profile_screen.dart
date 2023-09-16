@@ -1,27 +1,22 @@
 // ignore_for_file: unused_field, non_constant_identifier_names, duplicate_ignore, unused_catch_clause
 
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:hukibu/API/api_client.dart';
+import 'package:get/route_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import '../../../model/get_user.dart';
 import '../../../model/user_model.dart';
-
 import 'dart:developer';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/response/response.dart';
-
 import '../../../services/storage.dart';
 import '../../setting_screen.dart';
 
@@ -202,12 +197,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         foregroundColor: Colors.black,
         iconTheme: const IconThemeData(color: Colors.black),
-        title: const Center(
+        title: Center(
           child: Padding(
-            padding: EdgeInsets.only(right: 60),
+            padding: const EdgeInsets.only(right: 60),
             child: Text(
-              'Profile',
-              style: TextStyle(
+              'Profile'.tr(),
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
                 fontSize: 20,
@@ -247,12 +242,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               TextFormField(
                 controller: namecontroller,
-                decoration: const InputDecoration(
-                    hintText: 'Enter Your Name/Surname',
-                    labelText: 'Name/Surname'),
+                decoration: InputDecoration(
+                    labelText: 'Name/Surname'.tr()),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Name Required';
+                    return 'Name Required'.tr();
                   } else {
                     return null;
                   }
@@ -261,11 +255,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               TextFormField(
                 controller: agecontroller,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                    hintText: 'Enter Your Age', labelText: 'Age'),
+                decoration: InputDecoration(
+                    labelText: 'Age'.tr()),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Age Required';
+                    return 'Age Required'.tr();
                   } else {
                     return null;
                   }
@@ -280,36 +274,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   spacing: 8.0,
                   children: <Widget>[
                     ChoiceChip(
-                      label: const Text(
-                        'Male',
+                      label: Text(
+                        'Male'.tr(),
                       ),
-                      selected: gendercontroller.text.toLowerCase() == 'male',
+                      selected: gendercontroller.text.toLowerCase() == 'male'.tr(),
                       selectedColor: const Color.fromARGB(255, 158, 100, 169),
                       onSelected: (bool selected) {
                         setState(() {
-                          gendercontroller.text = (selected ? 'Male' : null)!;
+                          gendercontroller.text = (selected ? 'Male'.tr() : null)!;
                           print(gendercontroller.text);
                         });
                       },
                     ),
                     ChoiceChip(
-                      label: const Text('Female'),
-                      selected: gendercontroller.text.toLowerCase() == 'female',
+                      label: Text('Female'.tr()),
+                      selected: gendercontroller.text.toLowerCase() == 'female'.tr(),
                       selectedColor: const Color.fromARGB(255, 158, 100, 169),
                       onSelected: (bool selected) {
                         setState(() {
-                          gendercontroller.text = (selected ? 'Female' : null)!;
+                          gendercontroller.text = (selected ? 'Female'.tr() : null)!;
                           print(gendercontroller.text);
                         });
                       },
                     ),
                     ChoiceChip(
-                      label: const Text('Other'),
-                      selected: gendercontroller.text.toLowerCase() == 'other',
+                      label: Text('Other'.tr()),
+                      selected: gendercontroller.text.toLowerCase() == 'other'.tr(),
                       selectedColor: const Color.fromARGB(255, 158, 100, 169),
                       onSelected: (bool selected) {
                         setState(() {
-                          gendercontroller.text = (selected ? 'Other' : null)!;
+                          gendercontroller.text = (selected ? 'Other'.tr() : null)!;
                           print(gendercontroller.text);
                         });
                       },
@@ -320,11 +314,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               TextFormField(
                 controller: mobilecontroller,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                    hintText: 'Enter Your Mobile number', labelText: 'Mobile'),
+                decoration: InputDecoration(
+                    labelText: 'Mobile'.tr()),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Mobile number Required';
+                    return 'Mobile number Required'.tr();
                   } else {
                     return null;
                   }
@@ -332,11 +326,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               TextFormField(
                 controller: emailcontroller,
-                decoration: const InputDecoration(
-                    hintText: 'Enter Your Email', labelText: 'Email'),
+                decoration: InputDecoration(
+                    labelText: 'Email'.tr()),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Email Required';
+                    return 'Email Required'.tr();
                   } else {
                     return null;
                   }
@@ -344,11 +338,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               TextFormField(
                 controller: areacontroller,
-                decoration: const InputDecoration(
-                    hintText: 'Enter Your Area', labelText: 'Area'),
+                decoration: InputDecoration(
+                    labelText: 'Area'.tr()),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Area Required';
+                    return 'Area Required'.tr();
                   } else {
                     return null;
                   }
@@ -356,11 +350,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               TextFormField(
                 controller: educationcontroller,
-                decoration: const InputDecoration(
-                    hintText: 'Enter Your Education', labelText: 'Education'),
+                decoration: InputDecoration(
+                    labelText: 'Education'.tr()),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Education Required';
+                    return 'Education Required'.tr();
                   } else {
                     return null;
                   }
@@ -368,11 +362,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               TextFormField(
                 controller: jobcontroller,
-                decoration: const InputDecoration(
-                    hintText: 'Enter Your Job', labelText: 'Job'),
+                decoration: InputDecoration(
+                    labelText: 'Job'.tr()),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Job Required';
+                    return 'Job Required'.tr();
                   } else {
                     return null;
                   }
@@ -380,11 +374,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               TextFormField(
                 controller: vocationcontroller,
-                decoration: const InputDecoration(
-                    hintText: 'Enter Your Vocation', labelText: 'Vocation'),
+                decoration: InputDecoration(
+                    labelText: 'Vocation'.tr()),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Vocation Required';
+                    return 'Vocation Required'.tr();
                   } else {
                     return null;
                   }
@@ -414,9 +408,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Center(
               child: loading ?
               const CircularProgressIndicator(color: Colors.white)
-              :const Text(
-            'Submit',
-            style: TextStyle(
+              :Text(
+            'Submit'.tr(),
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 15,
               fontWeight: FontWeight.bold,
