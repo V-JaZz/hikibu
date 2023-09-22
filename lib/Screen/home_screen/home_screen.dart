@@ -139,7 +139,7 @@ class HomeScreen extends GetView<HomeController> {
           foregroundColor: Colors.black,
           iconTheme: const IconThemeData(color: Colors.black),
           title: const Text(
-            "Hukibu",
+            "Aybala",
             style: TextStyle(
               color: Colors.black,
               fontSize: 20,

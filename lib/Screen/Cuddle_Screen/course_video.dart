@@ -25,7 +25,7 @@ class CourseVideoPlay extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.black),
         title: const Center(
           child: Text(
-            "Hukibu",
+            "Aybala",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.black,

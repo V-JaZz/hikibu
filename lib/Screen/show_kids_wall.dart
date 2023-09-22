@@ -22,7 +22,7 @@ class _ShowKidsWallState extends State<ShowKidsWall> {
         iconTheme: const IconThemeData(color: Colors.black),
         title: const Center(
           child: Text(
-            'Hukibu',
+            'Aybala',
             style: TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),
           ),

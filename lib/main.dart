@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
         locale: context.locale,
         supportedLocales: context.supportedLocales,
         localizationsDelegates: context.localizationDelegates,
-        title: 'Hukibu',
+        title: 'Aybala',
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
         ),

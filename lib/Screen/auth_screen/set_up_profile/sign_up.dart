@@ -25,7 +25,7 @@ class SignUpScreen extends GetView<AuthController> {
           child: Padding(
             padding: EdgeInsets.only(right: 28.0),
             child: Text(
-              'Hukibu',
+              'Aybala',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
