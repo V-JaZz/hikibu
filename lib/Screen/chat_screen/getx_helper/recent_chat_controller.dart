@@ -20,8 +20,7 @@ class RecentChatController extends GetxController {
   RxList<Children> users = <Children>[].obs;
   final myUserId = UserStore.to.uid;
   var isLoading = false.obs;
-  RefreshController refreshController =
-  RefreshController(initialRefresh: true);
+  RefreshController refreshController = RefreshController(initialRefresh: true);
 
   @override
   Future<void> onInit() async {
